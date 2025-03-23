@@ -9,4 +9,7 @@
     <string name="profile">Profil</string>
     <string name="photo_profile">Foto Profil</string>
     <string name="back">Kembali</string>
+    <string name="task_title">Judul Tugas</string>
+    <string name="task_description">Deskripsi Tugas</string>
+    <string name="create_new_task">Membuat Tugas Baru</string>
 </resources>
