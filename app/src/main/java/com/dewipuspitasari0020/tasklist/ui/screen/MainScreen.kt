@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -31,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -51,13 +53,13 @@ fun MainScreen() {
                         verticalArrangement = Arrangement.Bottom,
                         modifier = Modifier.padding(top = 10.dp)
                     ){
-                        Text(text = stringResource(R.string.welcome_back), fontSize = 12.sp, color = MaterialTheme.colorScheme.inversePrimary)
+                        Text(text = stringResource(R.string.welcome_back), fontSize = 12.sp, color = MaterialTheme.colorScheme.secondary)
                         Text(text = stringResource(R.string.developer_name), fontSize = 22.sp, fontWeight = FontWeight.Bold)
                     }
                 },
                 colors = TopAppBarDefaults.largeTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.inverseSurface,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                    containerColor = MaterialTheme.colorScheme.inverseOnSurface,
+                    titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
                 actions = {
                     IconButton(onClick = {}, modifier = Modifier.padding(18.dp)) {
@@ -80,7 +82,7 @@ fun MainScreen() {
                 Icon(
                     imageVector = Icons.Filled.Add,
                     contentDescription = stringResource(R.string.add_task),
-                    tint = MaterialTheme.colorScheme.primaryContainer
+                    tint = MaterialTheme.colorScheme.onSecondaryContainer
                 )
             }
         }
@@ -97,7 +99,7 @@ fun ScreenContent(modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .background(MaterialTheme.colorScheme.inverseSurface),
+            .background(MaterialTheme.colorScheme.inverseOnSurface),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Row(
@@ -111,13 +113,13 @@ fun ScreenContent(modifier: Modifier = Modifier) {
                 text = stringResource(R.string.task),
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 20.sp,
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = MaterialTheme.colorScheme.secondary,
             )
             TextButton(onClick = {}) {
                 Text(
                     text = stringResource(R.string.see_all),
                     fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.inversePrimary,
+                    color = MaterialTheme.colorScheme.secondary,
                 )
             }
         }
@@ -152,7 +154,12 @@ fun ScreenContent(modifier: Modifier = Modifier) {
                     color = MaterialTheme.colorScheme.onPrimary
                 )
                 ElevatedButton(
-                    onClick = { /* TODO */ }
+                    onClick = { /* TODO */ },
+                    colors = ButtonDefaults.elevatedButtonColors(
+                        containerColor = MaterialTheme.colorScheme.inversePrimary,
+                        contentColor = MaterialTheme.colorScheme.secondary
+                    )
+
                 ) {
                     Text(text = stringResource(R.string.done))
                 }
@@ -161,12 +168,12 @@ fun ScreenContent(modifier: Modifier = Modifier) {
     }
 
 }
-
+//
 @Preview(showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
 private fun PrevMain() {
-    TasklistTheme {
+    TasklistTheme  {
         MainScreen()
     }
 }
