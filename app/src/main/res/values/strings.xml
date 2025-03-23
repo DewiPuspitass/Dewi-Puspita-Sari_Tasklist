@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Tasklist</string>
+    <string name="welcome_back">Welcome Back</string>
+    <string name="add_task">Create New Task</string>
+    <string name="developer_name" translatable="false">Dewi Puspita Sari</string>
+    <string name="task">Ongoing Task</string>
+    <string name="see_all">See all</string>
+    <string name="done">Done</string>
 </resources>
