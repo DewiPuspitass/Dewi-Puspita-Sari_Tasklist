@@ -38,12 +38,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.dewipuspitasari0020.tasklist.R
+import com.dewipuspitasari0020.tasklist.navigation.Screen
 import com.dewipuspitasari0020.tasklist.ui.theme.TasklistTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(navController: NavHostController) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -61,7 +64,10 @@ fun MainScreen() {
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
                 actions = {
-                    IconButton(onClick = {}, modifier = Modifier.padding(18.dp)) {
+                    IconButton(
+                        onClick = { navController.navigate(Screen.Profile.route )},
+                        modifier = Modifier.padding(18.dp)
+                    ) {
                         Image(
                             painter = painterResource(R.drawable.fotoprofile),
                             contentDescription = "Profile",
@@ -74,7 +80,9 @@ fun MainScreen() {
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {},
+                onClick = {
+                    navController.navigate(Screen.AddTask.route)
+                },
                 containerColor = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(16.dp)
             ) {
@@ -143,7 +151,7 @@ fun ScreenContent(modifier: Modifier = Modifier) {
                     color = MaterialTheme.colorScheme.onPrimary
                 )
                 Text(
-                    text = "Dikerjakan di LMS",
+                    text = "Di kerjakan di LMS",
                     fontSize = 14.sp,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
@@ -153,7 +161,7 @@ fun ScreenContent(modifier: Modifier = Modifier) {
                     color = MaterialTheme.colorScheme.onPrimary
                 )
                 ElevatedButton(
-                    onClick = { /* TODO */ },
+                    onClick = { },
                     colors = ButtonDefaults.elevatedButtonColors(
                         containerColor = MaterialTheme.colorScheme.inversePrimary,
                         contentColor = MaterialTheme.colorScheme.secondary
@@ -165,14 +173,13 @@ fun ScreenContent(modifier: Modifier = Modifier) {
             }
         }
     }
-
 }
-//
+
 @Preview(showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
 private fun PrevMain() {
     TasklistTheme  {
-        MainScreen()
+        MainScreen(rememberNavController())
     }
 }

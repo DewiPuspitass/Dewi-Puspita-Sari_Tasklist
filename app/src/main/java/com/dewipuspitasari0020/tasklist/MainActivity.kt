@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.dewipuspitasari0020.tasklist.ui.screen.MainScreen
+import com.dewipuspitasari0020.tasklist.navigation.SetupNavGraph
 import com.dewipuspitasari0020.tasklist.ui.theme.TasklistTheme
 
 class MainActivity : ComponentActivity() {
@@ -13,7 +13,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TasklistTheme{
-                MainScreen()
+                SetupNavGraph()
             }
         }
     }

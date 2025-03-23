@@ -48,6 +48,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.dewipuspitasari0020.tasklist.R
 import com.dewipuspitasari0020.tasklist.ui.theme.TasklistTheme
 import java.util.Calendar
@@ -55,7 +57,7 @@ import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddTaskScreen() {
+fun AddTaskScreen(navController: NavHostController) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -68,7 +70,7 @@ fun AddTaskScreen() {
                 ),
                 navigationIcon = {
                     IconButton(
-                        onClick = {},
+                        onClick = { navController.popBackStack() },
                         colors = IconButtonDefaults.iconButtonColors(
                             contentColor = MaterialTheme.colorScheme.inverseSurface
                         )
@@ -208,6 +210,6 @@ fun DatePickerExample(context: Context) {
 @Composable
 private fun PrevHalamanTambah() {
     TasklistTheme {
-        AddTaskScreen()
+        AddTaskScreen(rememberNavController())
     }
 }

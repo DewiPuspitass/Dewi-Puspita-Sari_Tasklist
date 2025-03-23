@@ -35,12 +35,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.dewipuspitasari0020.tasklist.R
 import com.dewipuspitasari0020.tasklist.ui.theme.TasklistTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(navController: NavHostController) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -53,7 +55,7 @@ fun ProfileScreen() {
                 ),
                 navigationIcon = {
                     IconButton(
-                        onClick = {},
+                        onClick = { navController.popBackStack() },
                         colors = IconButtonDefaults.iconButtonColors(
                             contentColor = MaterialTheme.colorScheme.inverseSurface
                         )
@@ -160,6 +162,6 @@ fun ProfileScreen() {
 @Composable
 private fun PreviewProfileScreen() {
     TasklistTheme {
-        ProfileScreen()
+        ProfileScreen(rememberNavController())
     }
 }
