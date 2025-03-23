@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tasklist</string>
+    <string name="welcome_back">Selamat Datang</string>
+    <string name="add_task">Membuat Tugas Baru</string>
+    <string name="task">Task Saat Ini</string>
+    <string name="see_all">Lihat semua</string>
+    <string name="done">Selesai</string>
+    <string name="profile">Profil</string>
+    <string name="photo_profile">Foto Profil</string>
+    <string name="back">Kembali</string>
+</resources>
