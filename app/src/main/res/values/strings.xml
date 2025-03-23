@@ -6,4 +6,9 @@
     <string name="task">Ongoing Task</string>
     <string name="see_all">See all</string>
     <string name="done">Done</string>
+    <string name="profile">Profile</string>
+    <string name="photo_profile">Photo Profile</string>
+    <string name="back">Back</string>
+    <string name="developer_nim" translatable="false">607062300020</string>
+    <string name="developer_class" translatable="false">D3IF-47-03</string>
 </resources>
