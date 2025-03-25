@@ -4,7 +4,6 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.content.res.Configuration
 import android.widget.DatePicker
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,6 +35,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,9 +48,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.dewipuspitasari0020.tasklist.R
+import com.dewipuspitasari0020.tasklist.model.Task
+import com.dewipuspitasari0020.tasklist.model.TaskViewModel
 import com.dewipuspitasari0020.tasklist.ui.theme.TasklistTheme
 import java.util.Calendar
 import java.util.Date
@@ -91,9 +94,12 @@ fun AddTaskScreen(navController: NavHostController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddTask(modifier: Modifier = Modifier) {
+fun AddTask(modifier: Modifier = Modifier, taskViewModel: TaskViewModel = viewModel()) {
     val context = LocalContext.current
-    var text by remember { mutableStateOf("") }
+
+    var title by rememberSaveable { mutableStateOf("") }
+    var description by rememberSaveable { mutableStateOf("") }
+    var selectedDate by remember { mutableStateOf("") }
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -109,8 +115,8 @@ fun AddTask(modifier: Modifier = Modifier) {
             color = MaterialTheme.colorScheme.primary,
         )
         TextField(
-            value = text,
-            onValueChange = { newText -> text = newText },
+            value = title,
+            onValueChange = { newText -> title = newText },
             modifier = Modifier.fillMaxWidth(),
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = MaterialTheme.colorScheme.inversePrimary,
@@ -125,8 +131,8 @@ fun AddTask(modifier: Modifier = Modifier) {
             color = MaterialTheme.colorScheme.primary,
         )
         TextField(
-            value = text,
-            onValueChange = { newText -> text = newText },
+            value = description,
+            onValueChange = { newText -> description = newText },
             modifier = Modifier.fillMaxWidth().height(150.dp),
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = MaterialTheme.colorScheme.inversePrimary,
@@ -135,9 +141,24 @@ fun AddTask(modifier: Modifier = Modifier) {
             ),
             maxLines = 5
         )
-        DatePickerExample(context = context)
+        DatePickerExample(context) { date ->
+            date
+        }
         Button(
-            onClick = {},
+            onClick = {
+                if (title.isNotBlank() && description.isNotBlank() && selectedDate.isNotBlank()) {
+                    val newTask = Task(
+                        id = taskViewModel.tasks.size + 1,
+                        title = title,
+                        description = description,
+                        date = selectedDate
+                    )
+                    taskViewModel.addTask(newTask)
+                    title = ""
+                    description = ""
+                    selectedDate = ""
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(55.dp),
@@ -152,7 +173,7 @@ fun AddTask(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun DatePickerExample(context: Context) {
+fun DatePickerExample(context: Context, onDateSelected: (String) -> Unit) {
     val year: Int
     val month: Int
     val day: Int
@@ -169,6 +190,7 @@ fun DatePickerExample(context: Context) {
         context,
         { _: DatePicker, selectedYear: Int, selectedMonth: Int, dayOfMonth: Int ->
             date.value = "$dayOfMonth/${selectedMonth + 1}/$selectedYear"
+            onDateSelected(date.value)
         }, year, month, day
     )
     Row(
@@ -199,7 +221,7 @@ fun DatePickerExample(context: Context) {
                     contentColor = MaterialTheme.colorScheme.primary
                 )
             ) {
-                Text("Pilih Tanggal")
+                Text(date.value.ifEmpty { "Pilih Tanggal" })
             }
         }
     }
