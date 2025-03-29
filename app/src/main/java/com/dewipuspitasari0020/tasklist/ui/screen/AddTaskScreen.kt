@@ -32,6 +32,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,6 +50,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.dewipuspitasari0020.tasklist.R
@@ -88,18 +90,25 @@ fun AddTaskScreen(navController: NavHostController) {
                 )
         }
     ) { innerPadding ->
-        AddTask(modifier = Modifier.padding(innerPadding))
+        AddTask(modifier = Modifier.padding(innerPadding), navController = navController)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddTask(modifier: Modifier = Modifier, taskViewModel: TaskViewModel = viewModel()) {
+fun AddTask(
+    modifier: Modifier = Modifier,
+    taskViewModel: TaskViewModel = viewModel(),
+    navController: NavController
+) {
     val context = LocalContext.current
 
     var title by rememberSaveable { mutableStateOf("") }
     var description by rememberSaveable { mutableStateOf("") }
-    var selectedDate by remember { mutableStateOf("") }
+    var selectedDate by rememberSaveable { mutableStateOf("") }
+
+    val tasks by taskViewModel.tasks.collectAsState()
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -133,7 +142,9 @@ fun AddTask(modifier: Modifier = Modifier, taskViewModel: TaskViewModel = viewMo
         TextField(
             value = description,
             onValueChange = { newText -> description = newText },
-            modifier = Modifier.fillMaxWidth().height(150.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(150.dp),
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = MaterialTheme.colorScheme.inversePrimary,
                 focusedIndicatorColor = Color.Blue,
@@ -141,22 +152,23 @@ fun AddTask(modifier: Modifier = Modifier, taskViewModel: TaskViewModel = viewMo
             ),
             maxLines = 5
         )
+
         DatePickerExample(context) { date ->
-            date
+            selectedDate = date
         }
+
         Button(
             onClick = {
                 if (title.isNotBlank() && description.isNotBlank() && selectedDate.isNotBlank()) {
                     val newTask = Task(
-                        id = taskViewModel.tasks.size + 1,
+                        id = tasks.size + 1,
                         title = title,
                         description = description,
                         date = selectedDate
                     )
                     taskViewModel.addTask(newTask)
-                    title = ""
-                    description = ""
-                    selectedDate = ""
+
+                    navController.popBackStack()
                 }
             },
             modifier = Modifier
@@ -165,12 +177,14 @@ fun AddTask(modifier: Modifier = Modifier, taskViewModel: TaskViewModel = viewMo
             shape = RectangleShape,
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary),
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            ),
         ) {
             Text(text = stringResource(R.string.create_new_task))
         }
     }
 }
+
 
 @Composable
 fun DatePickerExample(context: Context, onDateSelected: (String) -> Unit) {

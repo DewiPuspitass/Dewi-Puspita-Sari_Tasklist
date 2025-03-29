@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -29,6 +31,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,9 +42,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.dewipuspitasari0020.tasklist.R
+import com.dewipuspitasari0020.tasklist.model.TaskViewModel
 import com.dewipuspitasari0020.tasklist.navigation.Screen
 import com.dewipuspitasari0020.tasklist.ui.theme.TasklistTheme
 
@@ -94,18 +101,18 @@ fun MainScreen(navController: NavHostController) {
             }
         }
     ){  innerPadding ->
-        Column {
-            ScreenContent(Modifier.padding(innerPadding))
-        }
+        val taskViewModel: TaskViewModel = viewModel()
+        ScreenContent(Modifier.padding(innerPadding), taskViewModel)
     }
 }
 
 @Composable
-fun ScreenContent(modifier: Modifier = Modifier) {
+fun ScreenContent(modifier: Modifier = Modifier, taskViewModel: TaskViewModel) {
+    val tasks by taskViewModel.tasks.collectAsStateWithLifecycle()
+
     Column(
         modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+//            .fillMaxSize()
             .background(MaterialTheme.colorScheme.inverseOnSurface),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -131,49 +138,56 @@ fun ScreenContent(modifier: Modifier = Modifier) {
             }
         }
 
-        Row(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(16.dp))
-                .clip(RoundedCornerShape(16.dp)),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(2.dp)
-            ) {
-                Text(
-                    text = "Task 1",
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
-                Text(
-                    text = "Di kerjakan di LMS",
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
-                Text(
-                    text = "Due date: ",
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
-                ElevatedButton(
-                    onClick = { },
-                    colors = ButtonDefaults.elevatedButtonColors(
-                        containerColor = MaterialTheme.colorScheme.inversePrimary,
-                        contentColor = MaterialTheme.colorScheme.secondary
-                    )
-
+        LazyColumn(modifier = Modifier.fillMaxSize()) {
+            items(tasks) { task ->
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                        .fillMaxWidth()
+                        .background(
+                            MaterialTheme.colorScheme.primary,
+                            shape = RoundedCornerShape(16.dp)
+                        )
+                        .clip(RoundedCornerShape(16.dp))
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = stringResource(R.string.done))
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Text(
+                            text = task.title,
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
+                        Text(
+                            text = task.description,
+                            fontSize = 14.sp,
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
+                        Text(
+                            text = "Due date: ${task.date}",
+                            fontSize = 14.sp,
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
+                        ElevatedButton(
+                            onClick = { taskViewModel.removeTask(task) },
+                            colors = ButtonDefaults.elevatedButtonColors(
+                                containerColor = MaterialTheme.colorScheme.inversePrimary,
+                                contentColor = MaterialTheme.colorScheme.secondary
+                            )
+                        ) {
+                            Text(text = stringResource(R.string.done))
+                        }
+                    }
                 }
             }
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
