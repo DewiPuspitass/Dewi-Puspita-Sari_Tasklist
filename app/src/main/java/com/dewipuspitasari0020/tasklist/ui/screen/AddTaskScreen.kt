@@ -104,8 +104,13 @@ fun AddTask(
     val context = LocalContext.current
 
     var title by rememberSaveable { mutableStateOf("") }
+    var titleError by remember { mutableStateOf(false) }
+
     var description by rememberSaveable { mutableStateOf("") }
+    var descriptionError by remember { mutableStateOf(false) }
+
     var selectedDate by rememberSaveable { mutableStateOf("") }
+    var selectDateError by remember { mutableStateOf(false) }
 
     val tasks by taskViewModel.tasks.collectAsState()
 
@@ -127,6 +132,7 @@ fun AddTask(
             value = title,
             onValueChange = { newText -> title = newText },
             modifier = Modifier.fillMaxWidth(),
+            supportingText = { ErrorHint(titleError) },
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = MaterialTheme.colorScheme.inversePrimary,
                 focusedIndicatorColor = Color.Blue,
@@ -145,6 +151,7 @@ fun AddTask(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(150.dp),
+            supportingText = { ErrorHint(descriptionError) },
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = MaterialTheme.colorScheme.inversePrimary,
                 focusedIndicatorColor = Color.Blue,
@@ -153,12 +160,15 @@ fun AddTask(
             maxLines = 5
         )
 
-        DatePickerExample(context) { date ->
+        DatePicker(context, selectDateError) { date ->
             selectedDate = date
         }
 
         Button(
             onClick = {
+                titleError = title == ""
+                descriptionError = description == ""
+                selectDateError = selectedDate == ""
                 if (title.isNotBlank() && description.isNotBlank() && selectedDate.isNotBlank()) {
                     val newTask = Task(
                         id = tasks.size + 1,
@@ -170,6 +180,8 @@ fun AddTask(
                     taskViewModel.addTask(newTask)
 
                     navController.popBackStack()
+                }else if (titleError || descriptionError || selectDateError){
+                    return@Button
                 }
             },
             modifier = Modifier
@@ -186,9 +198,8 @@ fun AddTask(
     }
 }
 
-
 @Composable
-fun DatePickerExample(context: Context, onDateSelected: (String) -> Unit) {
+fun DatePicker(context: Context, dateError: Boolean, onDateSelected: (String) -> Unit) {
     val year: Int
     val month: Int
     val day: Int
@@ -236,9 +247,24 @@ fun DatePickerExample(context: Context, onDateSelected: (String) -> Unit) {
                     contentColor = MaterialTheme.colorScheme.primary
                 )
             ) {
-                Text(date.value.ifEmpty { "Pilih Tanggal" })
+                Text(date.value.ifEmpty { stringResource(R.string.select_date) })
             }
         }
+        if (dateError) {
+            Text(
+                text = stringResource(R.string.input_invalid),
+                color = MaterialTheme.colorScheme.error,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun ErrorHint(isError: Boolean) {
+    if (isError){
+        Text(text= stringResource(R.string.input_invalid))
     }
 }
 

@@ -12,4 +12,6 @@
     <string name="task_title">Judul Tugas</string>
     <string name="task_description">Deskripsi Tugas</string>
     <string name="create_new_task">Membuat Tugas Baru</string>
+    <string name="input_invalid">Tidak boleh kosong</string>
+    <string name="select_date">Pilih Tanggal</string>
 </resources>
