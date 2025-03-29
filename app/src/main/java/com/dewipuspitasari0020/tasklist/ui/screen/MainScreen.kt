@@ -97,12 +97,12 @@ fun MainScreen(navController: NavHostController, viewModel: TaskViewModel) {
             }
         }
     ){  innerPadding ->
-        ScreenContent(Modifier.padding(innerPadding), viewModel)
+        ScreenContent(Modifier.padding(innerPadding), viewModel, navController)
     }
 }
 
 @Composable
-fun ScreenContent(modifier: Modifier = Modifier, taskViewModel: TaskViewModel) {
+fun ScreenContent(modifier: Modifier = Modifier, taskViewModel: TaskViewModel, navController: NavHostController) {
     val tasks by taskViewModel.tasks.collectAsStateWithLifecycle()
 
     Column(
@@ -123,7 +123,9 @@ fun ScreenContent(modifier: Modifier = Modifier, taskViewModel: TaskViewModel) {
                 fontSize = 20.sp,
                 color = MaterialTheme.colorScheme.secondary,
             )
-            TextButton(onClick = {}) {
+            TextButton(onClick = {
+                navController.navigate(Screen.AllTask.route)
+            }) {
                 Text(
                     text = stringResource(R.string.see_all),
                     fontSize = 16.sp,

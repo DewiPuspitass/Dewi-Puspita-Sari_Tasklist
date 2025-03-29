@@ -14,4 +14,5 @@
     <string name="create_new_task">Membuat Tugas Baru</string>
     <string name="input_invalid">Tidak boleh kosong</string>
     <string name="select_date">Pilih Tanggal</string>
+    <string name="all_task">Semua Tugas</string>
 </resources>

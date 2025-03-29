@@ -16,4 +16,5 @@
     <string name="create_new_task">Create New Task</string>
     <string name="input_invalid">Cannot Be Empty</string>
     <string name="select_date">Select Date</string>
+    <string name="all_task">All Task</string>
 </resources>

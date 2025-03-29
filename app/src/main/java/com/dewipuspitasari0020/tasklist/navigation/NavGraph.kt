@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.dewipuspitasari0020.tasklist.model.TaskViewModel
 import com.dewipuspitasari0020.tasklist.ui.screen.AddTaskScreen
+import com.dewipuspitasari0020.tasklist.ui.screen.AllTaskScreen
 import com.dewipuspitasari0020.tasklist.ui.screen.MainScreen
 import com.dewipuspitasari0020.tasklist.ui.screen.ProfileScreen
 
@@ -26,6 +27,9 @@ fun SetupNavGraph(navController: NavHostController = rememberNavController()) {
         }
         composable(route = Screen.AddTask.route) {
             AddTaskScreen(navController, viewModel = taskViewModel)
+        }
+        composable(route = Screen.AllTask.route) {
+            AllTaskScreen(navController, taskViewModel = taskViewModel)
         }
     }
 }
