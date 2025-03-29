@@ -134,48 +134,74 @@ fun ScreenContent(modifier: Modifier = Modifier, taskViewModel: TaskViewModel, n
             }
         }
 
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(tasks.filter { it.status == "active" }) { task ->
-                Row(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
-                        .fillMaxWidth()
-                        .background(
-                            MaterialTheme.colorScheme.primary,
-                            shape = RoundedCornerShape(16.dp)
-                        )
-                        .clip(RoundedCornerShape(16.dp))
-                        .padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+        if(tasks.isEmpty() || tasks.none { it.status != "inactive" }){
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .fillMaxWidth()
+                    .background(
+                        MaterialTheme.colorScheme.primary,
+                        shape = RoundedCornerShape(16.dp)
+                    )
+                    .clip(RoundedCornerShape(16.dp))
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        Text(
-                            text = task.title,
-                            fontSize = 22.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = MaterialTheme.colorScheme.onPrimary
-                        )
-                        Text(
-                            text = task.description,
-                            fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.onPrimary
-                        )
-                        Text(
-                            text = "Due date: ${task.date}",
-                            fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.onPrimary
-                        )
-                        ElevatedButton(
-                            onClick = { taskViewModel.doneTask(task) },
-                            colors = ButtonDefaults.elevatedButtonColors(
-                                containerColor = MaterialTheme.colorScheme.inversePrimary,
-                                contentColor = MaterialTheme.colorScheme.secondary
+                    Text(
+                        text = "Tidak ada Ongoing Task",
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+            }
+        }else{
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                items(tasks.filter { it.status == "active" }) { task ->
+                    Row(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp, vertical = 8.dp)
+                            .fillMaxWidth()
+                            .background(
+                                MaterialTheme.colorScheme.primary,
+                                shape = RoundedCornerShape(16.dp)
                             )
+                            .clip(RoundedCornerShape(16.dp))
+                            .padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
-                            Text(text = stringResource(R.string.done))
+                            Text(
+                                text = task.title,
+                                fontSize = 22.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
+                            Text(
+                                text = task.description,
+                                fontSize = 14.sp,
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
+                            Text(
+                                text = "Due date: ${task.date}",
+                                fontSize = 14.sp,
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
+                            ElevatedButton(
+                                onClick = { taskViewModel.doneTask(task) },
+                                colors = ButtonDefaults.elevatedButtonColors(
+                                    containerColor = MaterialTheme.colorScheme.inversePrimary,
+                                    contentColor = MaterialTheme.colorScheme.secondary
+                                )
+                            ) {
+                                Text(text = stringResource(R.string.done))
+                            }
                         }
                     }
                 }
