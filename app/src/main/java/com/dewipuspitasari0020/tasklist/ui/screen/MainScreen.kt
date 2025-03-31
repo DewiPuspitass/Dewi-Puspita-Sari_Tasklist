@@ -1,5 +1,7 @@
 package com.dewipuspitasari0020.tasklist.ui.screen
 
+import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -33,6 +35,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -104,6 +107,7 @@ fun MainScreen(navController: NavHostController, viewModel: TaskViewModel) {
 @Composable
 fun ScreenContent(modifier: Modifier = Modifier, taskViewModel: TaskViewModel, navController: NavHostController) {
     val tasks by taskViewModel.tasks.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     Column(
         modifier = modifier
@@ -193,14 +197,32 @@ fun ScreenContent(modifier: Modifier = Modifier, taskViewModel: TaskViewModel, n
                                 fontSize = 14.sp,
                                 color = MaterialTheme.colorScheme.onPrimary
                             )
-                            ElevatedButton(
-                                onClick = { taskViewModel.doneTask(task) },
-                                colors = ButtonDefaults.elevatedButtonColors(
-                                    containerColor = MaterialTheme.colorScheme.inversePrimary,
-                                    contentColor = MaterialTheme.colorScheme.secondary
-                                )
-                            ) {
-                                Text(text = stringResource(R.string.done))
+                            Row {
+                                ElevatedButton(
+                                    onClick = { taskViewModel.doneTask(task) },
+                                    colors = ButtonDefaults.elevatedButtonColors(
+                                        containerColor = MaterialTheme.colorScheme.inversePrimary,
+                                        contentColor = MaterialTheme.colorScheme.secondary
+                                    ),
+                                    modifier = Modifier.padding(end = 8.dp)
+                                ) {
+                                    Text(text = stringResource(R.string.done))
+                                }
+                                ElevatedButton(
+                                    onClick = {
+                                        shareData(
+                                            context = context,
+                                            message = context.getString(R.string.share_template,
+                                                task.title, task.description, task.date)
+                                        )
+                                    },
+                                    colors = ButtonDefaults.elevatedButtonColors(
+                                        containerColor = MaterialTheme.colorScheme.inversePrimary,
+                                        contentColor = MaterialTheme.colorScheme.secondary
+                                    )
+                                ) {
+                                    Text(text = stringResource(R.string.share))
+                                }
                             }
                         }
                     }
@@ -210,6 +232,15 @@ fun ScreenContent(modifier: Modifier = Modifier, taskViewModel: TaskViewModel, n
     }
 }
 
+public fun shareData (context: Context, message: String){
+    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+        type = "text/plain"
+        putExtra(Intent.EXTRA_TEXT, message)
+    }
+    if(shareIntent.resolveActivity(context.packageManager) != null){
+        context.startActivity(shareIntent)
+    }
+}
 
 @Preview(showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)

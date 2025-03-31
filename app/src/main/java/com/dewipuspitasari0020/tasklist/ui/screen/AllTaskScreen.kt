@@ -28,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -41,6 +42,8 @@ import com.dewipuspitasari0020.tasklist.model.TaskViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AllTaskScreen(navController: NavHostController, taskViewModel: TaskViewModel) {
+    val context = LocalContext.current
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -137,15 +140,33 @@ fun AllTaskScreen(navController: NavHostController, taskViewModel: TaskViewModel
                                     fontSize = 14.sp,
                                     color = MaterialTheme.colorScheme.onPrimary
                                 )
-                                if (task.status == "active") {
+                                Row {
+                                    if (task.status == "active") {
+                                        ElevatedButton(
+                                            onClick = { taskViewModel.doneTask(task) },
+                                            colors = ButtonDefaults.elevatedButtonColors(
+                                                containerColor = MaterialTheme.colorScheme.inversePrimary,
+                                                contentColor = MaterialTheme.colorScheme.secondary
+                                            ),
+                                            modifier = Modifier.padding(end = 8.dp)
+                                        ) {
+                                            Text(text = stringResource(R.string.done))
+                                        }
+                                    }
                                     ElevatedButton(
-                                        onClick = { taskViewModel.doneTask(task) },
+                                        onClick = {
+                                            shareData(
+                                                context = context,
+                                                message = context.getString(R.string.share_template,
+                                                    task.title, task.description, task.date)
+                                            )
+                                        },
                                         colors = ButtonDefaults.elevatedButtonColors(
                                             containerColor = MaterialTheme.colorScheme.inversePrimary,
                                             contentColor = MaterialTheme.colorScheme.secondary
                                         )
                                     ) {
-                                        Text(text = stringResource(R.string.done))
+                                        Text(text = stringResource(R.string.share))
                                     }
                                 }
                             }

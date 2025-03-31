@@ -17,4 +17,6 @@
     <string name="input_invalid">Cannot Be Empty</string>
     <string name="select_date">Select Date</string>
     <string name="all_task">All Task</string>
+    <string name="share">Share</string>
+    <string name="share_template">Title Task: %1$s \nDescription Task: %2$s \nDue Date: %3$s</string>
 </resources>
