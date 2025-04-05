@@ -232,7 +232,7 @@ fun ScreenContent(modifier: Modifier = Modifier, taskViewModel: TaskViewModel, n
     }
 }
 
-public fun shareData (context: Context, message: String){
+fun shareData (context: Context, message: String){
     val shareIntent = Intent(Intent.ACTION_SEND).apply {
         type = "text/plain"
         putExtra(Intent.EXTRA_TEXT, message)

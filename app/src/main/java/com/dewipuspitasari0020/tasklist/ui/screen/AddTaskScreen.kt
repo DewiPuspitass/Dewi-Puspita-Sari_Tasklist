@@ -36,8 +36,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -103,14 +101,12 @@ fun AddTask(
 ) {
     val context = LocalContext.current
 
-    var title by rememberSaveable { mutableStateOf("") }
-    var titleError by remember { mutableStateOf(false) }
+    val title = taskViewModel.title
+    val description = taskViewModel.description
 
-    var description by rememberSaveable { mutableStateOf("") }
-    var descriptionError by remember { mutableStateOf(false) }
-
-    var selectedDate by rememberSaveable { mutableStateOf("") }
-    var selectDateError by remember { mutableStateOf(false) }
+    val titleError = taskViewModel.titleError
+    val descriptionError = taskViewModel.descriptionError
+    val selectDateError = taskViewModel.dateError
 
     val tasks by taskViewModel.tasks.collectAsState()
 
@@ -130,7 +126,7 @@ fun AddTask(
         )
         TextField(
             value = title,
-            onValueChange = { newText -> title = newText },
+            onValueChange = { taskViewModel.title = it },
             modifier = Modifier.fillMaxWidth(),
             supportingText = { ErrorHint(titleError) },
             colors = TextFieldDefaults.textFieldColors(
@@ -147,7 +143,7 @@ fun AddTask(
         )
         TextField(
             value = description,
-            onValueChange = { newText -> description = newText },
+            onValueChange = { taskViewModel.description = it },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(150.dp),
@@ -161,27 +157,26 @@ fun AddTask(
         )
 
         DatePicker(context, selectDateError) { date ->
-            selectedDate = date
+            taskViewModel.selectedDate = date
         }
 
         Button(
             onClick = {
-                titleError = title == ""
-                descriptionError = description == ""
-                selectDateError = selectedDate == ""
-                if (title.isNotBlank() && description.isNotBlank() && selectedDate.isNotBlank()) {
+                taskViewModel.titleError = taskViewModel.title.isBlank()
+                taskViewModel.descriptionError = taskViewModel.description.isBlank()
+                taskViewModel.dateError = taskViewModel.selectedDate.isBlank()
+
+                if (!taskViewModel.titleError && !taskViewModel.descriptionError && !taskViewModel.dateError) {
                     val newTask = Task(
                         id = tasks.size + 1,
-                        title = title,
-                        description = description,
-                        date = selectedDate,
+                        title = taskViewModel.title,
+                        description = taskViewModel.description,
+                        date = taskViewModel.selectedDate,
                         status = "active"
                     )
                     taskViewModel.addTask(newTask)
-
+                    taskViewModel.clearForm()
                     navController.popBackStack()
-                }else if (titleError || descriptionError || selectDateError){
-                    return@Button
                 }
             },
             modifier = Modifier
