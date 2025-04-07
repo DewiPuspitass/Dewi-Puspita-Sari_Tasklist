@@ -3,6 +3,9 @@ package com.dewipuspitasari0020.tasklist.ui.screen
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -49,7 +52,10 @@ import com.dewipuspitasari0020.tasklist.R
 import com.dewipuspitasari0020.tasklist.model.TaskViewModel
 import com.dewipuspitasari0020.tasklist.navigation.Screen
 import com.dewipuspitasari0020.tasklist.ui.theme.TasklistTheme
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(navController: NavHostController, viewModel: TaskViewModel) {
@@ -104,10 +110,22 @@ fun MainScreen(navController: NavHostController, viewModel: TaskViewModel) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ScreenContent(modifier: Modifier = Modifier, taskViewModel: TaskViewModel, navController: NavHostController) {
     val tasks by taskViewModel.tasks.collectAsStateWithLifecycle()
     val context = LocalContext.current
+
+//    val sortedList = tasks.sortedBy { it.date }
+    val formatter = DateTimeFormatter.ofPattern("d/M/yyyy")
+    val sortedList = tasks.sortedBy {
+        try {
+            LocalDate.parse(it.date, formatter)
+        } catch (e: Exception) {
+            Log.e("ParseError", "Error parsing date: ${it.date}")
+            LocalDate.MIN
+        }
+    }
 
     Column(
         modifier = modifier
@@ -164,7 +182,7 @@ fun ScreenContent(modifier: Modifier = Modifier, taskViewModel: TaskViewModel, n
             }
         }else{
             LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(tasks.filter { it.status == "active" }) { task ->
+                items(sortedList.filter { it.status == "active" }) { task ->
                     Row(
                         modifier = Modifier
                             .padding(horizontal = 16.dp, vertical = 8.dp)
@@ -242,6 +260,7 @@ fun shareData (context: Context, message: String){
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
