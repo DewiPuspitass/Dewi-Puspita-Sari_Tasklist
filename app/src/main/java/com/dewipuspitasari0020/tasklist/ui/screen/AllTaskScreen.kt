@@ -1,5 +1,6 @@
 package com.dewipuspitasari0020.tasklist.ui.screen
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -32,12 +33,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.dewipuspitasari0020.tasklist.R
 import com.dewipuspitasari0020.tasklist.model.TaskViewModel
+import com.dewipuspitasari0020.tasklist.ui.theme.TasklistTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -77,8 +81,8 @@ fun AllTaskScreen(navController: NavHostController, taskViewModel: TaskViewModel
                 .padding(innerPadding)
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.inverseOnSurface)
-                .padding(18.dp),
-            verticalArrangement = Arrangement.spacedBy(18.dp),
+                .padding(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if(tasks.isEmpty()){
@@ -175,5 +179,15 @@ fun AllTaskScreen(navController: NavHostController, taskViewModel: TaskViewModel
                 }
             }
         }
+    }
+}
+
+
+@Preview(showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+private fun PreviewAllTaskScreen() {
+    TasklistTheme {
+        AllTaskScreen(rememberNavController(), taskViewModel = TaskViewModel())
     }
 }

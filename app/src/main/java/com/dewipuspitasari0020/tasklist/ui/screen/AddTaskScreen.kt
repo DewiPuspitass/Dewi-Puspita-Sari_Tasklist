@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -43,6 +44,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -116,7 +118,7 @@ fun AddTask(
             .verticalScroll(rememberScrollState())
             .background(MaterialTheme.colorScheme.inverseOnSurface)
             .padding(18.dp),
-        verticalArrangement = Arrangement.spacedBy(18.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(
             text = stringResource(R.string.task_title),
@@ -133,6 +135,9 @@ fun AddTask(
                 containerColor = MaterialTheme.colorScheme.inversePrimary,
                 focusedIndicatorColor = Color.Blue,
                 unfocusedIndicatorColor = Color.Transparent
+            ),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Next
             )
         )
         Text(
@@ -153,7 +158,10 @@ fun AddTask(
                 focusedIndicatorColor = Color.Blue,
                 unfocusedIndicatorColor = Color.Transparent
             ),
-            maxLines = 5
+            maxLines = 5,
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done
+            )
         )
 
         DatePicker(context, selectDateError) { date ->
@@ -217,7 +225,7 @@ fun DatePicker(context: Context, dateError: Boolean, onDateSelected: (String) ->
     Row(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column {
