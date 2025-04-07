@@ -94,7 +94,6 @@ fun AddTaskScreen(navController: NavHostController, viewModel: TaskViewModel) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddTask(
     modifier: Modifier = Modifier,
@@ -131,8 +130,9 @@ fun AddTask(
             onValueChange = { taskViewModel.title = it },
             modifier = Modifier.fillMaxWidth(),
             supportingText = { ErrorHint(titleError) },
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = MaterialTheme.colorScheme.inversePrimary,
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.inversePrimary,
+                unfocusedContainerColor = MaterialTheme.colorScheme.inversePrimary,
                 focusedIndicatorColor = Color.Blue,
                 unfocusedIndicatorColor = Color.Transparent
             ),
@@ -153,8 +153,9 @@ fun AddTask(
                 .fillMaxWidth()
                 .height(150.dp),
             supportingText = { ErrorHint(descriptionError) },
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = MaterialTheme.colorScheme.inversePrimary,
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.inversePrimary,
+                unfocusedContainerColor = MaterialTheme.colorScheme.inversePrimary,
                 focusedIndicatorColor = Color.Blue,
                 unfocusedIndicatorColor = Color.Transparent
             ),
