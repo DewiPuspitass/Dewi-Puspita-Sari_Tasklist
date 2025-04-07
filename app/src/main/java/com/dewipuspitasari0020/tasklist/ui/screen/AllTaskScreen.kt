@@ -103,7 +103,7 @@ fun AllTaskScreen(navController: NavHostController, taskViewModel: TaskViewModel
                         verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
                         Text(
-                            text = "Tidak ada Task",
+                            text = stringResource(R.string.no_task),
                             fontSize = 14.sp,
                             color = MaterialTheme.colorScheme.onPrimary
                         )

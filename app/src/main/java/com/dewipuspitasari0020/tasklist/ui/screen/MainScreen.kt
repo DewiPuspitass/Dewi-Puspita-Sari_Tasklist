@@ -174,7 +174,7 @@ fun ScreenContent(modifier: Modifier = Modifier, taskViewModel: TaskViewModel, n
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Text(
-                        text = "Tidak ada Ongoing Task",
+                        text = stringResource(R.string.no_task_now),
                         fontSize = 14.sp,
                         color = MaterialTheme.colorScheme.onPrimary
                     )

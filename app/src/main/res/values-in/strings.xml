@@ -17,4 +17,6 @@
     <string name="all_task">Semua Tugas</string>
     <string name="share">Bagikan</string>
     <string name="share_template">Judul Tugas: %1$s \\nDeskripsi Tugas: %2$s \\nTanggal Pengerjaan: %3$s</string>
+    <string name="no_task_now">Tidak ada tugas saat ini.</string>
+    <string name="no_task">"Tidak ada Tugas "</string>
 </resources>
