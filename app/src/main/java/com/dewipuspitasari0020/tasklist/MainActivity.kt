@@ -21,7 +21,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.dewipuspitasari0020.tasklist.navigation.Screen
 import com.dewipuspitasari0020.tasklist.navigation.SetupNavGraph
 import com.dewipuspitasari0020.tasklist.ui.theme.TasklistTheme
 import kotlinx.coroutines.delay
